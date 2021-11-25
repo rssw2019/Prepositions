@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Irregular Verbs V3</title>
+    <script src="prepositions_question_bank.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="quiztitle">
+    <h3></h3>
+</div>
+
+<div id="instructions"> </div>
+
+<div id="time"> </div>
+
+<div id="remaining_time" style="text-align:right;">  </div>
+
+<div id="score" style="text-align:right;"> </div>
+
+<div id="progress" style="text-align:left;"> </div>
+
+<div id="feedback"> </div>
+
+<div id="quizcontainer">  </div> 
+
+<div id="summary" style="background-color:orange;"> </div>
+
+<div id="restart"> </div>
+
+<script>
+    
+    document.getElementById("quiztitle").innerHTML=title;
+    document.getElementById("quizcontainer").innerHTML=instructions;
+   
+   const quizTime1=new Date();
+   const startTime=` ${quizTime1.toLocaleTimeString()} on ${quizTime1.getMonth()+1}/${quizTime1.getDate()}/${+quizTime1.getFullYear()} `;
+
+   
+   
+   //Set Quiz time
+   let quizTime=10;
+
+   //Display time over message
+   setTimeout(function(){ alert("The quiz time is over.");}, 
+   quizTime*1000*60);
+
+   //let mytimer=setInterval(function(){ alert("Hello"); }, 1000);
+
+    //Initial score
+    let score=0;
+    let percentage=0;
+    let questionNumber=1;
+    maxQuestions=questions.length-1;
+    minQuestions=0;
+    counter=Math.floor(Math.random()*(maxQuestions-minQuestions)+minQuestions);
+    console.log(counter);
+    
+    //Total number of questions for the quiz
+    let totalQuestions=10;
+
+    //Calculate Elapsed Time
+    
+
+    var myVar = setInterval(myTimer, 1000);
+
+    function myTimer() {
+        let currentTime=new Date();
+        let elapsedSeconds=(currentTime-quizTime1)/1000;
+        let remSeconds=quizTime*60-elapsedSeconds;
+        setInterval(function(){ document.getElementById("remaining_time").innerHTML=`<p> Remaining Time =  ${Math.floor(remSeconds/60)} min ${Math.floor(remSeconds%60)} sec </p>`;}, 1000)
+    }
+
+   //Quiz generator function
+   function quizGenerator()
+   {
+        document.getElementById("time").innerHTML=`<p> Qiuz Start Time = ${startTime}.</p>`;
+        let currentTime=new Date();
+        let elapsedSeconds=(currentTime-quizTime1)/1000;
+        let remSeconds=quizTime*60-elapsedSeconds;
+        if (remSeconds>0)
+        {           
+            document.getElementById("feedback").innerHTML=``;
+            
+            //create random choice order
+            let choiceOrder=[1,2,3,4,5];
+                    let max=questions[counter].choices.length-1;
+                    min=0;
+                    for (i=max;i>0;i--){            
+                        const j=Math.floor(Math.random() * (i + 1));
+                        const temp=choiceOrder[i];
+                        choiceOrder[i]=choiceOrder[j];
+                        choiceOrder[j]=temp;
+                    }
+            
+                for (let i=0;i<totalQuestions;i++){
+
+                    //write the progress
+                    document.getElementById("progress").innerHTML=`<p> ${questionNumber}/ ${totalQuestions} </p>`;
+
+
+                    //write the quesiton
+                    document.getElementById("quizcontainer").innerHTML=`${question_title} ${questions[counter].question} </p>`;
+
+                    //Write Answer choices
+                    //use .replace(/\s/g, '') to scrape all the white spaces inside the choice statements
+                    for (let j=0; j<questions[counter].choices.length;j++){
+                        document.getElementById("quizcontainer").innerHTML+=` <input type="radio" id=${j} name= "my choice" value=${questions[counter].choices[choiceOrder[j]-1].trim().replace(/\s/g, '')}> ${questions[counter].choices[choiceOrder[j]-1].trim()} <br>`;
+                    }
+
+                    document.getElementById("quizcontainer").innerHTML+="<p><button onclick=\"answerChecker()\"> Submit</button></p>";  
+
+                }
+        }
+        else
+        {
+            
+            document.getElementById("remaining_time").innerHTML=``;
+            document.getElementById("quizcontainer").innerHTML=`<p>The quiz time is over. Below is a summary of your result: <br>Number of correct answers = ${score} <br>Number of incorrect answers = ${totalQuestions-score}</p> <p> Refresh the browser if you want to take the quiz again.`;
+        
+        }
+    }
+
+    //answer Checker function
+    function answerChecker(){
+        let message="You did not select any answer.";
+        for (let i=0;i<questions[counter].choices.length;i++){
+            if(document.getElementById(i).checked) 
+                {   
+                    let selectedValue = document.getElementById(i).value.replace(/\s/g, ''); 
+                    console.log(selectedValue.replace(/\s/g, '')); 
+                    console.log(questions[counter].answer.replace(/\s/g, '')); 
+                    if (selectedValue==questions[counter].answer.replace(/\s/g, ''))
+                        {
+                            score=score+1;
+                            console.log(questionNumber);
+                            message=`<p style="font-color:green;">Great! Your answer was correct. The correct prepositoin for " ${questions[counter].question}" is "${questions[counter].answer}".</p>`;  
+                        }
+                    else{
+                        message=`<p>Oops! Your answer was not correct. The correct prepositoin for " ${questions[counter].question}" is "${questions[counter].answer}".</p>`;  
+                    }
+                }
+                else{
+                    //message="You did not choose any answer.";
+                }
+        }
+        document.getElementById("feedback").innerHTML=message;  
+        
+        document.getElementById("score").innerHTML=`<p> Quiz Grade: ${100*score/totalQuestions} %</p>`;
+        if(questionNumber<totalQuestions)
+        {
+            document.getElementById("quizcontainer").innerHTML=`<p><button onclick="quizGenerator()"> Next Question</p>`;  
+            //update the question counter
+            counter=counter+1;          
+        }
+        else
+        {
+            const quizTime2=new Date();
+            //Calculate the time spanned in minutes
+            let quizSpanTime=Math.ceil((quizTime2-quizTime1)/(1000*60));
+            if(score>0.7*totalQuestions)
+            {
+                document.getElementById("remaining_time").innerHTML=``;
+                document.getElementById("quizcontainer").innerHTML=`<p>Congratulations! You passed this quiz. Below is a summary of your result: <br>Number of correct answers = ${score} <br>Number of incorrect answers = ${totalQuestions-score}</p> <p> You took ${quizSpanTime} minutes to complete this quiz. Refresh the browser if you want to take the quiz again.`;
+            }
+            else{
+                document.getElementById("remaining_time").innerHTML=``;
+                document.getElementById("quizcontainer").innerHTML=`<p>You completed the quiz. Please study more and retake the quiz. Below is the summary of your result: <br>Number of correct answers = ${score} <br>Number of incorrect answers = ${totalQuestions-score}</p> <p> You took ${quizSpanTime} minutes to complete this quiz. Refresh the browser to retake the quiz.`;
+            }
+            
+            
+            
+            //reset the question counter=0
+            counter=0;
+            score=0;
+        }
+        //randomize the question counter
+        counter=Math.floor(Math.random()*(maxQuestions-minQuestions)+minQuestions);
+        console.log(counter);
+        questionNumber+=1;
+    }
+
+</script>
+</body>
+</html>
