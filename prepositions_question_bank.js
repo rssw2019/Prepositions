@@ -47,7 +47,7 @@ let questions =
 },
 {
     //general
-    "question":"Tom wrote a letter to Sam --- blue pen",
+    "question":"Tom wrote a letter to Sam --- a blue pen",
     "answer":"with",
     "choices":["in","on","with","by","of"]
 },
@@ -58,7 +58,7 @@ let questions =
     "choices":["in","on","at","by","over"]
 },
 {
-    "question":"I think there is someone ---- main door.",
+    "question":"I think there is someone ---- the main door.",
     "answer":"at",
     "choices":["in","on","at","by","next to"]
 },
@@ -214,7 +214,7 @@ let questions =
 },
 {
     //time
-    "question":"Since I work close to my home, I come home --- lunch time.",
+    "question":"Since I work close to my home, I come home --- the lunch time.",
     "answer":"at",
     "choices":["in","on","at","by","next to"]
 },
